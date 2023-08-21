@@ -1,5 +1,7 @@
 # organizador-de-arquivos-em-subpastas
 
+[![GitHub](https://img.shields.io/badge/Visit-My%20Profile-0891B2?style=flat-square&logo=github)](https://github.com/Tgentil)
+
 Este script foi desenvolvido para ajudar na reorganização de arquivos XML que estão distribuídos em diversas pastas e subpastas. Ele permite agrupar esses arquivos em novas pastas, com um número definido de arquivos por pasta.
 
 ## Como usar
