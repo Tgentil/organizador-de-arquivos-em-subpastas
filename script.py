@@ -36,15 +36,38 @@ def reorganizar_arquivos(
     # Coletar todos os arquivos
     todos_arquivos = coletar_arquivos(diretorio_origem)
 
+    # Rastrear movimentações
+    movimentacoes_origem = {}
+    movimentacoes_destino = {}
+
     # Certifique-se de que o diretório de destino exista
     if not os.path.exists(diretorio_destino):
         os.makedirs(diretorio_destino)
 
     # Mova os arquivos para as novas pastas
     for i, arquivo in enumerate(todos_arquivos):
-        pasta_atual = os.path.join(diretorio_destino, f'pasta_{i // arquivos_por_pasta}')
-        if not os.path.exists(pasta_atual):
-            os.makedirs(pasta_atual)
-        shutil.move(arquivo, os.path.join(pasta_atual, os.path.basename(arquivo)))
+        pasta_origem = os.path.dirname(arquivo)
+        pasta_atual_destino = os.path.join(diretorio_destino, f'pasta_{i // arquivos_por_pasta}')
+
+        # Atualizar rastreamento
+        movimentacoes_origem[pasta_origem] = movimentacoes_origem.get(pasta_origem, 0) + 1
+        movimentacoes_destino[pasta_atual_destino] = movimentacoes_destino.get(pasta_atual_destino, 0) + 1
+
+        # Mover arquivos
+        if not os.path.exists(pasta_atual_destino):
+            os.makedirs(pasta_atual_destino)
+        shutil.move(arquivo, os.path.join(pasta_atual_destino, os.path.basename(arquivo)))
+
+    # Gravar resultados em um arquivo txt
+    with open("resumo_movimentacoes.txt", "w", encoding="utf-8") as relatorio:
+        relatorio.write("Resumo das Movimentações:\n\n")
+        relatorio.write("Arquivos movidos de cada pasta origem:\n")
+        for pasta, qtd in movimentacoes_origem.items():
+            relatorio.write(f"{pasta}: {qtd} arquivos\n")
+
+        relatorio.write("\nArquivos em cada pasta de destino:\n")
+        for pasta, qtd in movimentacoes_destino.items():
+            relatorio.write(f"{pasta}: {qtd} arquivos\n")
+
 
 reorganizar_arquivos()
