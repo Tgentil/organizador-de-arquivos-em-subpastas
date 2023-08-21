@@ -3,6 +3,10 @@ Script para reorganizar arquivos dentro de uma pasta e suas subpastas.
 """
 import os
 import shutil
+import sys
+
+# Define o enconding
+sys.stdout.reconfigure(encoding='utf-8')
 
 def coletar_arquivos(diretorio):
     """Coleta recursivamente todos os arquivos em um diretório e suas subpastas."""
