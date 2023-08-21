@@ -1,8 +1,19 @@
 """ 
-Script para reorganizar arquivos xml dentro de uma pasta e suas subpastas.
+Script para reorganizar arquivos dentro de uma pasta e suas subpastas.
 """
 import os
 import shutil
+
+def coletar_arquivos(diretorio):
+    """Coleta recursivamente todos os arquivos em um diretório e suas subpastas."""
+    arquivos = []
+    for item in os.listdir(diretorio):
+        caminho_item = os.path.join(diretorio, item)
+        if os.path.isfile(caminho_item):
+            arquivos.append(caminho_item)
+        elif os.path.isdir(caminho_item):
+            arquivos.extend(coletar_arquivos(caminho_item))
+    return arquivos
 
 def reorganizar_arquivos(
     diretorio_origem="data", diretorio_destino="output", arquivos_por_pasta=1000):
@@ -11,22 +22,15 @@ def reorganizar_arquivos(
     com uma quantidade especificada de arquivos por pasta.
 
     Args:
-        diretorio_origem (str): O diretório de origem dos arquivos XML.
+        diretorio_origem (str): O diretório de origem dos arquivos.
         diretorio_destino (str): O diretório de destino para as novas pastas organizadas.
         arquivos_por_pasta (int): Quantidade de arquivos por pasta no diretório de destino.
 
     Returns:
         None
     """
-    # Coletar todos os arquivos XML
-    todos_arquivos = []
-    for pasta in os.listdir(diretorio_origem):
-        pasta_atual = os.path.join(diretorio_origem, pasta)
-        for subpasta in os.listdir(pasta_atual):
-            subpasta_atual = os.path.join(pasta_atual, subpasta)
-            for arquivo in os.listdir(subpasta_atual):
-                if arquivo.endswith('.xml'):
-                    todos_arquivos.append(os.path.join(subpasta_atual, arquivo))
+    # Coletar todos os arquivos
+    todos_arquivos = coletar_arquivos(diretorio_origem)
 
     # Certifique-se de que o diretório de destino exista
     if not os.path.exists(diretorio_destino):
